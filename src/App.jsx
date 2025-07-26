@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Search from "./components/Search";
 import Spinner from "./components/Spinner";
+import MovieCard from "./components/MovieCard";
 
 const API_BASE_URL = "https://api.themoviedb.org/3";
 
@@ -28,10 +29,7 @@ export default function App() {
       const endpoint = `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
 
       const response = await fetch(endpoint, API_OPTIONS);
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch movies");
-      }
+      if (!response.ok) throw new Error("Failed to fetch movies");
 
       const data = await response.json();
 
@@ -40,7 +38,7 @@ export default function App() {
       console.error(`Error fetching movies: ${error}`);
       setErrorMessage("Error fetching movies. Please try again later.");
     } finally {
-      setIsLoading(true);
+      setIsLoading(false);
     }
   };
 
@@ -72,9 +70,7 @@ export default function App() {
           ) : (
             <ul>
               {movieList.map((movie) => (
-                <li key={movie.id}>
-                  <p className="text-white">{movie.title}</p>
-                </li>
+                <MovieCard key={movie.id} movie={movie} />
               ))}
             </ul>
           )}
